@@ -1,6 +1,7 @@
 # ⚡ Industrial Power Fault Detection & Load Forecasting
 
-An AI-powered system that monitors industrial power grid sensor readings to **detect electrical faults** (classification) and **forecast energy load** (regression) — acting as a rational intelligent agent to prevent equipment damage and optimize energy use.
+An AI-powered system that monitors industrial power grid sensor readings to **detect electrical faults** (classification) and **forecast energy load** (regression).
+It also implements a **rational intelligent agent** that continuously analyzes system conditions and raises alerts.
 
 ---
 
@@ -8,40 +9,43 @@ An AI-powered system that monitors industrial power grid sensor readings to **de
 
 Industrial power systems face two critical challenges:
 
-1. **Fault Detection** — Undetected faults like voltage sags, overcurrents, and overheating cause equipment damage, production downtime, and safety hazards costing industries lakhs to crores per incident.
-2. **Load Forecasting** — Poor load prediction leads to energy wastage, peak demand penalties, and inefficient power procurement.
+1. **Fault Detection**
+   Faults like voltage sags, overcurrent, overheating, and harmonic distortion can damage equipment and cause downtime.
 
-This project applies supervised machine learning to solve both problems using real-time sensor data.
+2. **Load Forecasting**
+   Poor load prediction leads to energy wastage and higher operational costs.
+
+This project uses **supervised machine learning** to solve both problems using sensor data.
 
 ---
 
-## 🧠 Syllabus Concepts Applied
+## 🧠 Concepts Applied
 
-| Concept | Where Applied |
-|---|---|
-| Intelligent Agents & Rationality | `PowerFaultAgent` class — perceive, decide, act loop |
-| Supervised Learning — Classification | Fault detection (5 classes) |
-| Supervised Learning — Regression | Load forecasting (kW prediction) |
-| Search Strategies (Informed) | Grid Search for hyperparameter tuning |
-| Probability & Statistics | Class distributions, confidence scores |
-| Overfitting & Underfitting | Polynomial degree comparison in regression |
-| Bias-Variance Tradeoff | Demonstrated with degree-1 vs degree-3 polynomial |
-| Estimators, Validation Sets | Cross-validation, train/test split |
-| Feature Learning | Derived features (apparent power, reactive power, etc.) |
+| Concept                | Implementation                              |
+| ---------------------- | ------------------------------------------- |
+| Intelligent Agent      | `PowerFaultAgent` (Perceive → Decide → Act) |
+| Classification         | Fault detection                             |
+| Regression             | Load forecasting                            |
+| Grid Search            | Hyperparameter tuning                       |
+| Bias-Variance Tradeoff | Polynomial regression demo                  |
+| Cross-validation       | Model evaluation                            |
+| Feature Engineering    | Derived electrical features                 |
 
 ---
 
 ## 🗂️ Project Structure
 
 ```
-power-fault-detector/
+Power-fault-detector/
 │
-├── main.py               # Entry point — run full pipeline or individual tasks
-├── generate_data.py      # Synthetic sensor data generator
-├── fault_detection.py    # Classification: fault detection + intelligent agent
-├── load_forecasting.py   # Regression: load forecasting + bias-variance demo
-├── requirements.txt      # Python dependencies
-└── README.md
+├── main.py                # Entry point (runs full pipeline or tasks)
+├── generate_data.py       # Synthetic dataset generator
+├── fault_detection.py     # Fault classification + intelligent agent
+├── load_forecasting.py    # Load prediction + bias-variance demo
+├── categorize.py          # (Extra) NLP expense categorizer
+├── evaluate.py            # (Extra) evaluation for categorizer
+├── requirements.txt       # Dependencies
+├── README.md
 ```
 
 ---
@@ -51,15 +55,17 @@ power-fault-detector/
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/power-fault-detector.git
-cd power-fault-detector
+git clone https://github.com/Pranjal-IIT-Madras/Power-fault-detector.git
+cd Power-fault-detector
 ```
 
 ### 2. Create Virtual Environment
 
 ```bash
 python -m venv venv
-source venv/bin/activate       # Windows: venv\Scripts\activate
+venv\Scripts\activate        # Windows
+# or
+source venv/bin/activate     # Linux/Mac
 ```
 
 ### 3. Install Dependencies
@@ -72,79 +78,61 @@ pip install -r requirements.txt
 
 ## 🚀 Running the Project
 
-### Run Full Pipeline (recommended)
+### ▶️ Run Full Pipeline (Recommended)
 
 ```bash
 python main.py
 ```
 
-This runs all three steps:
-1. Generates 2000 synthetic sensor readings
-2. Trains fault detection classifier + runs agent demo
-3. Trains load forecasting regressor + shows bias-variance analysis
+This will:
 
-### Run Individual Modules
+1. Generate synthetic dataset (if not present)
+2. Train fault detection model
+3. Run intelligent agent demo
+4. Train load forecasting model
+5. Show bias-variance analysis
 
-```bash
-python main.py --task generate   # Generate dataset only
-python main.py --task fault      # Fault detection only
-python main.py --task load       # Load forecasting only
-```
+---
 
-### Run Modules Directly
+### ▶️ Run Individual Tasks
 
 ```bash
-python generate_data.py
-python fault_detection.py power_sensor_data.csv
-python load_forecasting.py power_sensor_data.csv
+python main.py --task generate   # Generate dataset
+python main.py --task fault      # Fault detection
+python main.py --task load       # Load forecasting
 ```
 
 ---
 
 ## 📊 Sensor Features
 
-The system monitors 6 real-time power sensor readings:
-
-| Feature | Unit | Normal Range |
-|---|---|---|
-| Voltage | V | 410–420 V |
-| Current | A | 60–100 A |
-| Power Factor | — | 0.88–0.97 |
-| Frequency | Hz | 49.9–50.1 Hz |
-| Temperature | °C | 38–55 °C |
-| Total Harmonic Distortion (THD) | % | 2–5% |
-
----
-
-## 🔴 Fault Classes Detected
-
-| Code | Fault Type | Key Indicator |
-|---|---|---|
-| 0 | Normal | All readings within spec |
-| 1 | Voltage Sag | Voltage drops to ~330V |
-| 2 | Overcurrent | Current exceeds 150A |
-| 3 | Overheating | Temperature exceeds 85°C |
-| 4 | Harmonic Distortion | THD exceeds 8% |
+| Feature       | Description             |
+| ------------- | ----------------------- |
+| voltage_v     | Voltage (V)             |
+| current_a     | Current (A)             |
+| power_factor  | Power efficiency        |
+| frequency_hz  | System frequency        |
+| temperature_c | Equipment temperature   |
+| thd_pct       | Harmonic distortion (%) |
+| load_kw       | Power consumption (kW)  |
 
 ---
 
-## 📈 Expected Results
+## 🔴 Fault Classes
 
-**Fault Detection (Classification):**
-- Accuracy: ~96–98%
-- Weighted F1-Score: ~96–98%
-- Models compared: Logistic Regression, Random Forest, Gradient Boosting, SVM
-
-**Load Forecasting (Regression):**
-- Best RMSE: ~2–4 kW
-- R² Score: ~0.96–0.99
-- Models compared: Linear, Ridge, Lasso, ElasticNet, Random Forest, Gradient Boosting
+| Code | Fault               |
+| ---- | ------------------- |
+| 0    | Normal              |
+| 1    | Voltage Sag         |
+| 2    | Overcurrent         |
+| 3    | Overheating         |
+| 4    | Harmonic Distortion |
 
 ---
 
 ## 🤖 Intelligent Agent
 
-The `PowerFaultAgent` class implements the agent architecture from the AI syllabus:
+The system includes a **rational intelligent agent**:
 
 ```python
 from fault_detection import PowerFaultAgent
@@ -152,27 +140,75 @@ import joblib
 
 model  = joblib.load("fault_model.pkl")
 scaler = joblib.load("fault_scaler.pkl")
-agent  = PowerFaultAgent(model, scaler)
+
+agent = PowerFaultAgent(model, scaler)
 
 reading = {
-    "voltage_v": 328.0, "current_a": 105.0, "power_factor": 0.76,
-    "frequency_hz": 49.75, "temperature_c": 53.0, "thd_pct": 5.8
+    "voltage_v": 330,
+    "current_a": 100,
+    "power_factor": 0.80,
+    "frequency_hz": 49.8,
+    "temperature_c": 50,
+    "thd_pct": 6
 }
+
 agent.act(reading)
 ```
 
-Output:
-```
-  Detected       : Voltage Sag
-  Severity       : ⚠️  WARNING
-  Confidence     : 97.32%
-```
+### 🔄 Agent Workflow
+
+* **Perceive** → Reads sensor data
+* **Decide** → Predicts fault using ML model
+* **Act** → Displays alert with severity & confidence
+
+---
+
+## 📈 Models Used
+
+### Classification (Fault Detection)
+
+* Logistic Regression
+* Random Forest
+* Gradient Boosting
+* Support Vector Machine (SVM)
+
+### Regression (Load Forecasting)
+
+* Linear Regression
+* Ridge / Lasso / ElasticNet
+* Random Forest Regressor
+* Gradient Boosting Regressor
+
+---
+
+## 📊 Output Highlights
+
+* Fault classification with confidence scores
+* Confusion matrix & F1-score
+* Load prediction with RMSE, MAE, R²
+* Bias-variance tradeoff demonstration
+
+---
+
+## ⚠️ Notes
+
+* Dataset is **synthetic but realistic (~2000 samples)**
+* Models are trained dynamically (no pre-trained dependency required)
+* `categorize.py` and `evaluate.py` are **extra modules (not part of main pipeline)**
 
 ---
 
 ## 🏫 Course Context
 
-Built as a BYOP (Bring Your Own Project) submission for the **Machine Learning / AI** course. Covers CO2–CO5 outcomes including problem solving, supervised learning, statistical decision theory, and machine learning applications in an industrial engineering context.
+This project demonstrates:
+
+* Intelligent Agents
+* Supervised Learning
+* Feature Engineering
+* Model Evaluation
+* Bias-Variance Tradeoff
+
+Aligned with **Machine Learning / AI coursework (CO2–CO5)**.
 
 ---
 

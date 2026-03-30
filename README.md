@@ -212,6 +212,3 @@ Aligned with **Machine Learning / AI coursework (CO2–CO5)**.
 
 ---
 
-## 📝 License
-
-MIT License — free to use and modify.
